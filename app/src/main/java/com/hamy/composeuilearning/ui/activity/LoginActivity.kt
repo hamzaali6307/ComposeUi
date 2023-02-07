@@ -34,6 +34,17 @@ class LoginActivity : ComponentActivity() {
         }
     }
 
+    fun login(userName: String, password: String) {
+        when {
+            (userName.isNotEmpty() && password.isNotEmpty()) && userName == "hamza" && password == "12345" -> {
+                myToast("login successfully")
+            }
+            else -> {
+                myToast("user name/ password not matched")
+            }
+        }
+    }
+
     @Preview(showBackground = true, name = "light mode")
     @Preview(showBackground = true, name = "dark mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
     @Composable
@@ -55,19 +66,19 @@ class LoginActivity : ComponentActivity() {
 
             Text(
                 text = "Hello Again!",
-                color = Color.Blue,
+                color = Color.Black,
                 fontSize = 20.sp,
                 fontFamily = FontFamily.Monospace,
             )
             Text(
                 text = "Welcome",
-                color = Color.Blue,
+                color = Color.Black,
                 fontSize = 20.sp,
                 fontFamily = FontFamily.Monospace,
             )
             Text(
                 text = "back",
-                color = Color.Blue,
+                color = Color.Black,
                 fontSize = 20.sp,
                 fontFamily = FontFamily.Monospace,
             )
@@ -96,7 +107,7 @@ class LoginActivity : ComponentActivity() {
             )
 
             OutlinedButton(onClick = {
-                myToast("my toast")
+                login(userName.value,password.value)
             }, modifier = Modifier.fillMaxWidth()) {
                 Text(text = "Login")
 
