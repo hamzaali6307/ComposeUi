@@ -5,6 +5,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -13,6 +14,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -23,18 +25,23 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hamy.composeuilearning.R
+import com.hamy.composeuilearning.ui.model.Post
 import com.hamy.composeuilearning.ui.model.User
 import com.hamy.composeuilearning.ui.model.dumyData
+import com.hamy.composeuilearning.ui.network.viewModel.PostViewModel
 import com.hamy.composeuilearning.ui.theme.ComposeUiLearningTheme
+import com.hamy.composeuilearning.utils.ApiState
 
 class RecyclerView : ComponentActivity() {
+    private val viewModel : PostViewModel  by viewModels()
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ComposeUiLearningTheme() {
                 Scaffold() {
-                    Recyclerview(data = dumyData())
+                    GetApiData(viewModel)
+                    //Recyclerview(data = dumyData())
                 }
             }
         }
@@ -44,7 +51,7 @@ class RecyclerView : ComponentActivity() {
     @Preview(showBackground = true, name = "dark mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
     @Composable
     fun EachRow(
-         user: User = User("dummy data")) {
+         user: Post = Post(0,"")) {
         Card(
             modifier = Modifier.padding(8.dp, 8.dp),
             shape = RoundedCornerShape(CornerSize(10.dp)),
@@ -58,16 +65,38 @@ class RecyclerView : ComponentActivity() {
                         .align(Alignment.CenterVertically)
                         .clip(RoundedCornerShape(CornerSize(10.dp)))
                 )
-                Text(text = user.userName, modifier = Modifier.padding(5.dp))
+                Text(text = user.body, modifier = Modifier.padding(5.dp))
             }
         }
     }
 
     @Composable
-    private fun Recyclerview(data:List<User>){
+    private fun GetApiData(viewModel: PostViewModel){
+        when(val result = viewModel.response.value){
+            is ApiState.Success ->{
+                LazyColumn{
+                    items(result.data){ it ->
+                        EachRow(user = it)
+                    }
+                }
+            }
+            is ApiState.Loading ->{
+                CircularProgressIndicator()
+            }
+            is ApiState.Failure ->{
+                    Text(text = "${result.message}")
+            }
+            is ApiState.Empty ->{
+
+            }
+        }
+
+    }
+    @Composable
+    private fun Recyclerview(data:List<Post>){
         LazyColumn{
-            items(data){
-                EachRow(user = it)
+            items(data){ resp ->
+                EachRow(user = resp)
             }
         }
     }
