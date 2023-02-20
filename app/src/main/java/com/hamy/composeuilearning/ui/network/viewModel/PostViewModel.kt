@@ -22,15 +22,13 @@ class PostViewModel @Inject constructor(private val postRepository: PostReposito
         getPost()
     }
 
-   private fun getPost() = viewModelScope.launch {
-        response.apply {
-            postRepository.getPost().onStart {
-                value = ApiState.Loading
-            }.catch {
-                value = ApiState.Failure(it)
-            }.collect {
-                value = ApiState.Success(it)
-            }
+    private fun getPost() = viewModelScope.launch {
+        postRepository.getPost().onStart {
+            response.value = ApiState.Loading
+        }.catch {
+            response.value = ApiState.Failure(it)
+        }.collect {
+            response.value = ApiState.Success(it)
         }
     }
 }
