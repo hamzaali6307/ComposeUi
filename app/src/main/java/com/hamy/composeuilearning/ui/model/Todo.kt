@@ -9,5 +9,5 @@ data class Todo(
     val description: String
 ){
     @PrimaryKey(autoGenerate = true)
-    val id: Int? = null
+    var id: Int = 0
 }
