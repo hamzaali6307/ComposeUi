@@ -15,7 +15,7 @@
         android:theme="@style/Theme.ComposeUiLearning"
         tools:targetApi="31">
         <activity
-            android:name=".ui.activity.TodoActivity"
+            android:name=".ui.activity.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.ComposeUiLearning">
             <intent-filter>

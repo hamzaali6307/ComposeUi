@@ -1,5 +1,6 @@
 package com.hamy.composeuilearning.ui.activity
 
+import OnBoardingScreen
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -50,7 +51,8 @@ class MainActivity : ComponentActivity() {
 //                    floatingActionButtonPosition = FabPosition.End
                 ) { padding ->
                     myLogs(padding.toString())
-                    Greeting("hamza")
+                    OnBoardingScreen()
+                 //   Greeting("hamza")
                 }
             }
         }
